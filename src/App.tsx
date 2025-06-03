@@ -104,11 +104,12 @@ const App = () => {
     setShowResult(true);
     setResultado(resultadoFinal);
 
-    console.log("Enviando para planilha:", {
-      nome: userData.nome,
-      email: userData.email,
-      nivel: resultadoFinal.nivel
-    });
+    console.log("Enviando para planilha:", [
+  userData.nome,
+  userData.email,
+  resultado?.nivel,
+  new Date().toLocaleString()
+]);
 
     fetch("https://v1.nocodeapi.com/descomplicacompras/google_sheets/MNWslNUwIcSWYVyy?tabId=Dados", {
       method: "POST",
