@@ -94,27 +94,39 @@ const App = () => {
   const handleSubmit = () => {
     const totalScore = calcularPontuacao(answers);
     const resultadoFinal = classificarNivel(totalScore);
+
+    if (!userData.nome || !userData.email || !resultadoFinal?.nivel) {
+      alert("Preencha todos os dados antes de continuar.");
+      return;
+    }
+
     setShowForm(false);
     setShowResult(true);
     setResultado(resultadoFinal);
 
- fetch("https://v1.nocodeapi.com/descomplicacompras/google_sheets/MNWslNUwIcSWYVyy?tabId=Dados", {
-  method: "POST",
-  headers: {
-    "Content-Type": "application/json"
-  },
-  body: JSON.stringify({
-    values: [[
-      userData.nome,
-      userData.email,
-      resultadoFinal.nivel,
-      new Date().toLocaleString()
-    ]]
-  })
-});
-}; // <-- Essa chave estava faltando aqui (fecha handleSubmit)
+    console.log("Enviando para planilha:", {
+      nome: userData.nome,
+      email: userData.email,
+      nivel: resultadoFinal.nivel
+    });
 
-const progresso = Math.round((step / quizData.length) * 100);
+    fetch("https://v1.nocodeapi.com/descomplicacompras/google_sheets/MNWslNUwIcSWYVyy?tabId=Dados", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        values: [[
+          userData.nome,
+          userData.email,
+          resultadoFinal.nivel,
+          new Date().toLocaleString()
+        ]]
+      })
+    });
+  };
+
+  const progresso = Math.round((step / quizData.length) * 100);
 
   return (
     <div style={{ padding: "2rem", fontFamily: "sans-serif" }}>
@@ -228,3 +240,4 @@ const progresso = Math.round((step / quizData.length) * 100);
 };
 
 export default App;
+
