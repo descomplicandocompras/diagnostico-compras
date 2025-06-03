@@ -98,17 +98,20 @@ const App = () => {
     setShowResult(true);
     setResultado(resultadoFinal);
 
-    fetch("https://script.google.com/macros/s/AKfycby7NKyb_J_5Gtf7elMZQiC2vCEcv-BiRZtPVMVkznbnyctNjh7UANHVe-ExEI3loynuxg/exec", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        nome: userData.nome,
-        email: userData.email,
-        nivel: resultadoFinal.nivel,
-        data: new Date().toLocaleString()
-      })
-    });
-  };
+    fetch("https://v1.nocodeapi.com/descomplicacompras/google_sheets/MNWslNUwIcSWYVyy?tabId=Página1", {
+  method: "POST",
+  headers: {
+    "Content-Type": "application/json"
+  },
+  body: JSON.stringify({
+    values: [
+      userData.nome,
+      userData.email,
+      resultadoFinal.nivel,
+      new Date().toLocaleString()
+    ]
+  })
+});
 
   const progresso = Math.round((step / quizData.length) * 100);
 
