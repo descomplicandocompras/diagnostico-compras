@@ -104,12 +104,12 @@ const App = () => {
     "Content-Type": "application/json"
   },
   body: JSON.stringify({
-    values: [
+    values: [[
       userData.nome,
       userData.email,
       resultadoFinal.nivel,
       new Date().toLocaleString()
-    ]
+    ]]
   })
 });
 }; // <-- Essa chave estava faltando aqui (fecha handleSubmit)
