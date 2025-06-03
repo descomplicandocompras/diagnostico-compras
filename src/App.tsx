@@ -54,16 +54,14 @@ const quizData = [
 const App = () => {
   const [step, setStep] = useState(0);
   const [answers, setAnswers] = useState<number[]>([]);
-  const [showForm, setShowForm] = useState(false);
   const [showResult, setShowResult] = useState(false);
-  const [userData, setUserData] = useState({ nome: "", email: "" });
   const [resultado, setResultado] = useState<any>(null);
 
   const handleAnswer = (valor: number) => {
     const updatedAnswers = [...answers, valor];
     setAnswers(updatedAnswers);
     if (step + 1 < quizData.length) setStep(step + 1);
-    else setShowForm(true);
+    else handleSubmit(updatedAnswers);
   };
 
   const calcularPontuacao = (respostas: number[]) => {
@@ -91,39 +89,20 @@ const App = () => {
     return { nivel: "Diretor de Compras", descricao: "Você pensa em nível de negócios. É referência em decisões estratégicas e gestão de riscos." };
   };
 
-  const handleSubmit = () => {
-    const totalScore = calcularPontuacao(answers);
+  const handleSubmit = (respostas: number[]) => {
+    const totalScore = calcularPontuacao(respostas);
     const resultadoFinal = classificarNivel(totalScore);
-
-    if (!userData.nome || !userData.email || !resultadoFinal?.nivel) {
-      alert("Preencha todos os dados antes de continuar.");
-      return;
-    }
-
-    setShowForm(false);
-    setShowResult(true);
     setResultado(resultadoFinal);
+    setShowResult(true);
+  };
 
-    console.log("Enviando para planilha:", {
-      nome: userData.nome,
-      email: userData.email,
-      nivel: resultadoFinal.nivel
-    });
-
-    fetch("https://v1.nocodeapi.com/descomplicacompras/google_sheets/MNWslNUwIcSWYVyy?tabId=Dados", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({
-        values: [[
-          userData.nome,
-          userData.email,
-          resultadoFinal.nivel,
-          new Date().toLocaleString()
-        ]]
-      })
-    });
+  const handleBack = () => {
+    if (step > 0) {
+      const novasRespostas = [...answers];
+      novasRespostas.pop();
+      setAnswers(novasRespostas);
+      setStep(step - 1);
+    }
   };
 
   const progresso = Math.round((step / quizData.length) * 100);
@@ -137,7 +116,7 @@ const App = () => {
         por  @descomplicando.compras
       </p>
 
-      {!showForm && !showResult ? (
+      {!showResult ? (
         <>
           <div style={{ marginBottom: "1rem" }}>
             <p>
@@ -154,85 +133,70 @@ const App = () => {
               />
             </div>
           </div>
-          <h2>{quizData[step].question}</h2>
 
-          {quizData[step].options.map((opt, idx) => (
-            <button
-              key={idx}
-              onClick={() => handleAnswer(opt.valor)}
-              style={{
-                display: "block",
-                margin: "8px 0",
-                padding: "12px",
-                backgroundColor: "#FCB225",
-                color: "#000",
-                border: "none",
-                borderRadius: "6px",
-                fontWeight: "bold",
-                cursor: "pointer"
-              }}
-            >
-              {opt.texto}
-            </button>
-          ))}
+          <h2 style={{ textAlign: "center" }}>{quizData[step].question}</h2>
+
+          <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
+            {quizData[step].options.map((opt, idx) => (
+              <button
+                key={idx}
+                onClick={() => handleAnswer(opt.valor)}
+                style={{
+                  margin: "8px 0",
+                  padding: "12px 24px",
+                  backgroundColor: "#FCB225",
+                  color: "#000",
+                  border: "none",
+                  borderRadius: "6px",
+                  fontWeight: "bold",
+                  cursor: "pointer",
+                  width: "100%",
+                  maxWidth: "400px"
+                }}
+              >
+                {opt.texto}
+              </button>
+            ))}
+          </div>
 
           {step > 0 && (
-            <button
-              onClick={() => {
-                const novasRespostas = [...answers];
-                novasRespostas.pop();
-                setAnswers(novasRespostas);
-                setStep(step - 1);
-              }}
-              style={{
-                marginTop: "12px",
-                backgroundColor: "#ccc",
-                padding: "10px",
-                borderRadius: "6px",
-                fontWeight: "bold",
-                cursor: "pointer"
-              }}
-            >
-              ⬅ Voltar
-            </button>
+            <div style={{ display: "flex", justifyContent: "center" }}>
+              <button
+                onClick={handleBack}
+                style={{
+                  marginTop: "12px",
+                  backgroundColor: "#ccc",
+                  padding: "10px 24px",
+                  borderRadius: "6px",
+                  fontWeight: "bold",
+                  cursor: "pointer"
+                }}
+              >
+                ⬅ Voltar
+              </button>
+            </div>
           )}
-        </>
-      ) : showForm ? (
-        <>
-          <h2>Antes de ver seu resultado, informe seus dados:</h2>
-          <input
-            placeholder="Nome completo"
-            className="w-full p-2 border"
-            value={userData.nome}
-            onChange={(e) => setUserData({ ...userData, nome: e.target.value })}
-          />
-          <input
-            type="email"
-            placeholder="Seu melhor e-mail"
-            className="w-full p-2 border"
-            value={userData.email}
-            onChange={(e) => setUserData({ ...userData, email: e.target.value })}
-          />
-          <button onClick={handleSubmit}>Ver Resultado</button>
         </>
       ) : (
         <>
-          <h2>{resultado.nivel}</h2>
-          <p>{resultado.descricao}</p>
+          <h2 style={{ textAlign: "center" }}>{resultado.nivel}</h2>
+          <p style={{ textAlign: "center" }}>{resultado.descricao}</p>
 
-          <button
-            onClick={() => window.location.reload()}
-            style={{
-              marginTop: "10px",
-              backgroundColor: "#ccc",
-              padding: "10px",
-              borderRadius: "6px",
-              fontWeight: "bold",
-              cursor: "pointer"
-            }}
-          >
-            🔁 Refazer o teste
-          </button>
+          <div style={{ display: "flex", justifyContent: "center" }}>
+            <button
+              onClick={() => window.location.reload()}
+              style={{
+                marginTop: "20px",
+                backgroundColor: "#ccc",
+                padding: "10px 24px",
+                borderRadius: "6px",
+                fontWeight: "bold",
+                cursor: "pointer"
+              }}
+            >
+              🔁 Refazer o teste
+            </button>
+          </div>
         </>
       )}
     </div>
