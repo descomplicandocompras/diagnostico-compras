@@ -1,5 +1,4 @@
 import { useState } from "react";
-import jsPDF from "jspdf";
 import "./App.css";
 
 const quizData = [
@@ -52,8 +51,6 @@ const quizData = [
   { question: "Você usa Excel, Power BI ou outros sistemas para relatórios?", options: [{ texto: "Nunca usei", valor: 0 }, { texto: "Tenho noção básica", valor: 0.5 }, { texto: "Sim, aplico na rotina", valor: 1 }], peso: 2 },
 ];
 
-
-
 const App = () => {
   const [step, setStep] = useState(0);
   const [answers, setAnswers] = useState<number[]>([]);
@@ -101,7 +98,6 @@ const App = () => {
     setShowResult(true);
     setResultado(resultadoFinal);
 
-
     fetch("https://script.google.com/macros/s/AKfycby7NKyb_J_5Gtf7elMZQiC2vCEcv-BiRZtPVMVkznbnyctNjh7UANHVe-ExEI3loynuxg/exec", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -109,22 +105,22 @@ const App = () => {
         nome: userData.nome,
         email: userData.email,
         nivel: resultadoFinal.nivel,
-        score: totalScore,
         data: new Date().toLocaleString()
       })
     });
   };
 
-    const progresso = Math.round((step / quizData.length) * 100);
+  const progresso = Math.round((step / quizData.length) * 100);
 
   return (
     <div style={{ padding: "2rem", fontFamily: "sans-serif" }}>
       <h1 style={{ textAlign: "center", fontSize: "1.8rem", fontWeight: "bold", marginBottom: "0.5rem" }}>
-  Diagnóstico de Perfil em Compras
-</h1>
-<p style={{ textAlign: "center", fontSize: "1rem", color: "#555", marginBottom: "1.5rem" }}>
-  por  @descomplicando.compras
-</p>
+        Diagnóstico de Perfil em Compras
+      </h1>
+      <p style={{ textAlign: "center", fontSize: "1rem", color: "#555", marginBottom: "1.5rem" }}>
+        por  @descomplicando.compras
+      </p>
+
       {!showForm && !showResult ? (
         <>
           <div style={{ marginBottom: "1rem" }}>
@@ -136,7 +132,7 @@ const App = () => {
                 style={{
                   width: `${progresso}%`,
                   height: "10px",
-                  background: "#4caf50",
+                  background: "#FCB225",
                   borderRadius: "4px"
                 }}
               />
@@ -144,47 +140,46 @@ const App = () => {
           </div>
           <h2>{quizData[step].question}</h2>
 
-{quizData[step].options.map((opt, idx) => (
-  <button
-    key={idx}
-    onClick={() => handleAnswer(opt.valor)}
-    style={{
-      display: "block",
-      margin: "8px 0",
-      padding: "12px",
-      backgroundColor: "#FCB225",
-      color: "#000",
-      border: "none",
-      borderRadius: "6px",
-      fontWeight: "bold",
-      cursor: "pointer"
-    }}
-  >
-    {opt.texto}
-  </button>
-))}
+          {quizData[step].options.map((opt, idx) => (
+            <button
+              key={idx}
+              onClick={() => handleAnswer(opt.valor)}
+              style={{
+                display: "block",
+                margin: "8px 0",
+                padding: "12px",
+                backgroundColor: "#FCB225",
+                color: "#000",
+                border: "none",
+                borderRadius: "6px",
+                fontWeight: "bold",
+                cursor: "pointer"
+              }}
+            >
+              {opt.texto}
+            </button>
+          ))}
 
-{/* Botão de voltar visível só se não for a primeira pergunta */}
-{step > 0 && (
-  <button
-    onClick={() => {
-      const novasRespostas = [...answers];
-      novasRespostas.pop(); // remove última resposta
-      setAnswers(novasRespostas);
-      setStep(step - 1);
-    }}
-    style={{
-      marginTop: "12px",
-      backgroundColor: "#ccc",
-      padding: "10px",
-      borderRadius: "6px",
-      fontWeight: "bold",
-      cursor: "pointer"
-    }}
-  >
-    ⬅ Voltar
-  </button>
-)}
+          {step > 0 && (
+            <button
+              onClick={() => {
+                const novasRespostas = [...answers];
+                novasRespostas.pop();
+                setAnswers(novasRespostas);
+                setStep(step - 1);
+              }}
+              style={{
+                marginTop: "12px",
+                backgroundColor: "#ccc",
+                padding: "10px",
+                borderRadius: "6px",
+                fontWeight: "bold",
+                cursor: "pointer"
+              }}
+            >
+              ⬅ Voltar
+            </button>
+          )}
         </>
       ) : showForm ? (
         <>
@@ -207,21 +202,21 @@ const App = () => {
       ) : (
         <>
           <h2>{resultado.nivel}</h2>
-<p>{resultado.descricao}</p>
+          <p>{resultado.descricao}</p>
 
-<button
-  onClick={() => window.location.reload()}
-  style={{
-    marginTop: "10px",
-    backgroundColor: "#ccc",
-    padding: "10px",
-    borderRadius: "6px",
-    fontWeight: "bold",
-    cursor: "pointer"
-  }}
->
-  🔁 Refazer o teste
-</button>
+          <button
+            onClick={() => window.location.reload()}
+            style={{
+              marginTop: "10px",
+              backgroundColor: "#ccc",
+              padding: "10px",
+              borderRadius: "6px",
+              fontWeight: "bold",
+              cursor: "pointer"
+            }}
+          >
+            🔁 Refazer o teste
+          </button>
         </>
       )}
     </div>
