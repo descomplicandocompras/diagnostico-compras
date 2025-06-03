@@ -98,7 +98,7 @@ const App = () => {
     setShowResult(true);
     setResultado(resultadoFinal);
 
-    fetch("https://v1.nocodeapi.com/descomplicacompras/google_sheets/MNWslNUwIcSWYVyy?tabId=Página1", {
+ fetch("https://v1.nocodeapi.com/descomplicacompras/google_sheets/MNWslNUwIcSWYVyy?tabId=Pagina1", {
   method: "POST",
   headers: {
     "Content-Type": "application/json"
