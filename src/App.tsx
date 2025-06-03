@@ -91,38 +91,40 @@ const App = () => {
     return { nivel: "Diretor de Compras", descricao: "Você pensa em nível de negócios. É referência em decisões estratégicas e gestão de riscos." };
   };
 
-const handleSubmit = () => {
-  const totalScore = calcularPontuacao(answers);
-  const resultadoFinal = classificarNivel(totalScore);
+  const handleSubmit = () => {
+    const totalScore = calcularPontuacao(answers);
+    const resultadoFinal = classificarNivel(totalScore);
 
-  if (!userData.nome || !userData.email || !resultadoFinal?.nivel) {
-    alert("Preencha todos os dados antes de continuar.");
-    return;
-  }
+    if (!userData.nome || !userData.email || !resultadoFinal?.nivel) {
+      alert("Preencha todos os dados antes de continuar.");
+      return;
+    }
 
-  setShowForm(false);
-  setShowResult(true);
-  setResultado(resultadoFinal);
+    setShowForm(false);
+    setShowResult(true);
+    setResultado(resultadoFinal);
 
-  const payload = [
-    userData.nome,
-    userData.email,
-    resultadoFinal.nivel,
-    new Date().toLocaleString()
-  ];
+    console.log("Enviando para planilha:", {
+      nome: userData.nome,
+      email: userData.email,
+      nivel: resultadoFinal.nivel
+    });
 
-  console.log("Enviando para planilha:", payload);
-
-  fetch("https://v1.nocodeapi.com/descomplicacompras/google_sheets/MNWslNUwIcSWYVyy?tabId=API", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json"
-    },
-    body: JSON.stringify({
-      values: [payload]
-    })
-  });
-};
+    fetch("https://v1.nocodeapi.com/descomplicacompras/google_sheets/MNWslNUwIcSWYVyy?tabId=Dados", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        values: [[
+          userData.nome,
+          userData.email,
+          resultadoFinal.nivel,
+          new Date().toLocaleString()
+        ]]
+      })
+    });
+  };
 
   const progresso = Math.round((step / quizData.length) * 100);
 
@@ -238,4 +240,3 @@ const handleSubmit = () => {
 };
 
 export default App;
-
