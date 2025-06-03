@@ -113,7 +113,7 @@ const handleSubmit = () => {
 
   console.log("Enviando para planilha:", payload);
 
-  fetch("https://v1.nocodeapi.com/descomplicacompras/google_sheets/MNWslNUwIcSWYVyy?tabId=Dados", {
+  fetch("https://v1.nocodeapi.com/descomplicacompras/google_sheets/MNWslNUwIcSWYVyy?tabId=API", {
     method: "POST",
     headers: {
       "Content-Type": "application/json"
