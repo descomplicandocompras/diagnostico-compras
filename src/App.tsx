@@ -112,8 +112,9 @@ const App = () => {
     ]
   })
 });
+}; // <-- Essa chave estava faltando aqui (fecha handleSubmit)
 
-  const progresso = Math.round((step / quizData.length) * 100);
+const progresso = Math.round((step / quizData.length) * 100);
 
   return (
     <div style={{ padding: "2rem", fontFamily: "sans-serif" }}>
