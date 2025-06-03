@@ -115,18 +115,7 @@ const App = () => {
     });
   };
 
-  const gerarPDF = () => {
-    const doc = new jsPDF();
-    doc.setFontSize(16);
-    doc.text("Resultado do Diagnóstico de Compras", 20, 20);
-    doc.setFontSize(12);
-    doc.text(`Nome: ${userData.nome}`, 20, 30);
-    doc.text(`E-mail: ${userData.email}`, 20, 36);
-    doc.text(`Nível: ${resultado.nivel}`, 20, 42);
-    doc.save("resultado-diagnostico.pdf");
-  };
-
-  const progresso = Math.round((step / quizData.length) * 100);
+    const progresso = Math.round((step / quizData.length) * 100);
 
   return (
     <div style={{ padding: "2rem", fontFamily: "sans-serif" }}>
