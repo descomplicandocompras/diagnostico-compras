@@ -61,7 +61,6 @@ const App = () => {
   const [showResult, setShowResult] = useState(false);
   const [userData, setUserData] = useState({ nome: "", email: "" });
   const [resultado, setResultado] = useState<any>(null);
-  const [score, setScore] = useState<number>(0);
 
   const handleAnswer = (valor: number) => {
     const updatedAnswers = [...answers, valor];
@@ -101,7 +100,7 @@ const App = () => {
     setShowForm(false);
     setShowResult(true);
     setResultado(resultadoFinal);
-    setScore(totalScore);
+
 
     fetch("https://script.google.com/macros/s/AKfycby7NKyb_J_5Gtf7elMZQiC2vCEcv-BiRZtPVMVkznbnyctNjh7UANHVe-ExEI3loynuxg/exec", {
       method: "POST",
@@ -220,19 +219,6 @@ const App = () => {
         <>
           <h2>{resultado.nivel}</h2>
 <p>{resultado.descricao}</p>
-<button
-  onClick={gerarPDF}
-  style={{
-    backgroundColor: "#FCB225",
-    color: "#000",
-    padding: "10px",
-    borderRadius: "6px",
-    fontWeight: "bold",
-    cursor: "pointer"
-  }}
->
-  📄 Baixar PDF
-</button>
 
 <button
   onClick={() => window.location.reload()}
