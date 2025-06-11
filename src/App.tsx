@@ -1,7 +1,9 @@
+// App.tsx
 import { useState } from "react";
 import "./App.css";
 
-const quizData = [
+// Quiz de Nível
+const quizNivel = [
   { question: "Há quanto tempo você atua na área de compras?", options: [{ texto: "Menos de 6 meses", valor: 0 }, { texto: "De 6 meses a 2 anos", valor: 0.5 }, { texto: "Mais de 2 anos", valor: 1 }], peso: 1 },
   { question: "Você realiza pedidos de compras no sistema da empresa?", options: [{ texto: "Nunca utilizei", valor: 0 }, { texto: "Faço com orientação", valor: 0.5 }, { texto: "Domino o processo", valor: 1 }], peso: 1 },
   { question: "Você acompanha o status dos pedidos que gera?", options: [{ texto: "Não acompanho", valor: 0 }, { texto: "Acompanho às vezes", valor: 0.5 }, { texto: "Sim, sempre acompanho", valor: 1 }], peso: 1 },
@@ -51,11 +53,47 @@ const quizData = [
   { question: "Você usa Excel, Power BI ou outros sistemas para relatórios?", options: [{ texto: "Nunca usei", valor: 0 }, { texto: "Tenho noção básica", valor: 0.5 }, { texto: "Sim, aplico na rotina", valor: 1 }], peso: 2 },
 ];
 
+// Quiz de Negociação
+const quizNegociacao = [
+  { question: "Antes de negociar, você estrutura um plano com objetivos claros, critérios de sucesso e limites de concessão?", options: [{ texto: "Não, entro sem preparação estruturada", valor: 0 }, { texto: "Tenho uma ideia geral, mas nada formal", valor: 0.5 }, { texto: "Sim, defino metas, limites e estratégia com antecedência", valor: 1 }], peso: 3 },
+{ question: "Você já analisou os custos ocultos (como impostos, frete, armazenagem) antes de decidir por um fornecedor?", options: [{ texto: "Nunca analisei esses pontos", valor: 0 }, { texto: "Analisei em casos específicos", valor: 0.5 }, { texto: "Sim, sempre considero o custo total de aquisição (TCO)", valor: 1 }], peso: 3 },
+{ question: "Durante uma negociação tensa com fornecedor exclusivo, você:...", options: [{ texto: "Aceita as condições por falta de alternativa", valor: 0 }, { texto: "Negocia pequenos ajustes para amenizar os impactos", valor: 0.5 }, { texto: "Apresenta dados, histórico de não conformidade e busca reequilibrar tecnicamente", valor: 1 }], peso: 3 },
+{ question: "Você já estruturou uma proposta visual com dados de consumo, curva ABC ou saving para defender sua negociação?", options: [{ texto: "Nunca usei ferramentas para isso", valor: 0 }, { texto: "Já fiz algo básico em planilha", valor: 0.5 }, { texto: "Sim, uso gráficos, benchmarks e KPIs para sustentar minha argumentação", valor: 1 }], peso: 2 },
+{ question: "Você revisa cláusulas contratuais como reajuste, SLA, penalidades e prazo de vigência antes de assinar?", options: [{ texto: "Confio no jurídico e assino", valor: 0 }, { texto: "Dou uma olhada rápida", valor: 0.5 }, { texto: "Sim, discuto cláusulas críticas com o jurídico e solicito ajustes se necessário", valor: 1 }], peso: 2 },
+{ question: "Ao negociar prazo de entrega em uma situação crítica de produção, você:...", options: [{ texto: "Aceita a primeira promessa para não atrasar", valor: 0 }, { texto: "Negocia verbalmente e torce para que funcione", valor: 0.5 }, { texto: "Documenta o impacto, propõe alternativas e valida com planejamento", valor: 1 }], peso: 3 },
+{ question: "Você já aplicou a técnica de ancoragem para influenciar o valor de referência de uma proposta?", options: [{ texto: "Nunca utilizei", valor: 0 }, { texto: "Usei informalmente, sem estratégia clara", valor: 0.5 }, { texto: "Sim, uso valores de mercado ou históricos como referência para conduzir a negociação", valor: 1 }], peso: 2 },
+{ question: "Você sabe calcular e apresentar o ‘saving’ obtido em uma negociação?", options: [{ texto: "Não sei como calcular saving", valor: 0 }, { texto: "Tenho ideia, mas não uso na prática", valor: 0.5 }, { texto: "Sim, calculo, registro e comunico os ganhos", valor: 1 }], peso: 2 },
+{ question: "Após fechar uma negociação, você costuma realizar follow-up estruturado com o fornecedor?", options: [{ texto: "Não, só falo se tiver problema", valor: 0 }, { texto: "Faço acompanhamentos pontuais", valor: 0.5 }, { texto: "Sim, acompanho entrega, performance e faço reuniões de alinhamento", valor: 1 }], peso: 2 },
+{ question: "Você consegue explicar de forma técnica e objetiva por que uma proposta foi rejeitada ou aceita?", options: [{ texto: "Não costumo justificar", valor: 0 }, { texto: "Justifico com base em preço e prazos apenas", valor: 0.5 }, { texto: "Sim, justifico com critérios técnicos, fiscais e estratégicos", valor: 1 }], peso: 2 },
+{ question: "Você já enfrentou situações de impasse e transformou o fornecedor em parceiro estratégico no futuro?", options: [{ texto: "Nunca aconteceu", valor: 0 }, { texto: "Aconteceu por acaso", valor: 0.5 }, { texto: "Sim, reverti situações difíceis e fortalecei a relação", valor: 1 }], peso: 3 },
+{ question: "Você sabe usar o silêncio, a pausa e a escuta ativa como estratégia durante uma negociação?", options: [{ texto: "Não, costumo preencher todos os espaços", valor: 0 }, { texto: "Às vezes, mas sem intenção clara", valor: 0.5 }, { texto: "Sim, uso pausas e escuta como ferramentas de influência", valor: 1 }], peso: 2 },
+{ question: "Você utiliza dados internos (estoque, curva ABC, urgência) para fundamentar prazos e preços em uma negociação?", options: [{ texto: "Nunca usei isso como argumento", valor: 0 }, { texto: "Já citei informalmente", valor: 0.5 }, { texto: "Sim, levo dados reais da empresa para compor a argumentação", valor: 1 }], peso: 2 },
+{ question: "Você já conduziu uma renegociação contratual com base em mudança de cenário (ex: inflação, crise logística)?", options: [{ texto: "Nunca participei disso", valor: 0 }, { texto: "Participei, mas só como apoio", valor: 0.5 }, { texto: "Sim, conduzi com proposta estruturada e reequilíbrio contratual", valor: 1 }], peso: 2 },
+{ question: "Você sabe o que é BATNA (melhor alternativa à negociação) e como ela protege sua posição?", options: [{ texto: "Nunca ouvi falar", valor: 0 }, { texto: "Já vi em cursos", valor: 0.5 }, { texto: "Sim, estruturo minha BATNA antes de negociar", valor: 1 }], peso: 3 },
+{ question: "Você já negociou contratos com fornecedores internacionais ou em outro idioma?", options: [{ texto: "Nunca passei por isso", valor: 0 }, { texto: "Já tive contato com apoio de tradutor", valor: 0.5 }, { texto: "Sim, conduzi negociação com fornecedor estrangeiro com autonomia técnica", valor: 1 }], peso: 3 },
+{ question: "Você aplica o conceito de ganho mútuo (win-win) nas negociações?", options: [{ texto: "Não, foco só no que é melhor para a empresa", valor: 0 }, { texto: "Aplico em alguns casos", valor: 0.5 }, { texto: "Sim, busco sempre criar valor para ambos os lados", valor: 1 }], peso: 2 },
+{ question: "Você já precisou renegociar com fornecedor em situação de monopólio (única opção de fornecimento)?", options: [{ texto: "Aceitei as condições", valor: 0 }, { texto: "Consegui pequenos ajustes", valor: 0.5 }, { texto: "Conduzi negociação técnica mesmo com baixa margem de manobra", valor: 1 }], peso: 3 },
+{ question: "Você consegue adaptar seu estilo de comunicação conforme o perfil do fornecedor (técnico, comercial, agressivo)?", options: [{ texto: "Não costumo adaptar", valor: 0 }, { texto: "Às vezes ajusto o tom", valor: 0.5 }, { texto: "Sim, ajusto abordagem conforme perfil e contexto", valor: 1 }], peso: 2 },
+{ question: "Você já antecipou riscos de fornecimento e ajustou cláusulas ou garantias contratuais antes do problema acontecer?", options: [{ texto: "Não previ esse tipo de risco", valor: 0 }, { texto: "Já considerei mas sem formalizar", valor: 0.5 }, { texto: "Sim, adaptei o contrato com base em análise de risco", valor: 1 }], peso: 3 },
+{ question: "Você sabe negociar cláusulas de reajuste (índice, frequência, teto)?", options: [{ texto: "Nunca me envolvi nisso", valor: 0 }, { texto: "Já vi em contrato, mas não participei", valor: 0.5 }, { texto: "Sim, discuto e proponho reajustes com base técnica", valor: 1 }], peso: 2 },
+{ question: "Você já precisou negociar algo fora do escopo do comprador (jurídico, qualidade, técnico)?", options: [{ texto: "Nunca atuei fora da minha área", valor: 0 }, { texto: "Apoiei outros setores informalmente", valor: 0.5 }, { texto: "Sim, conduzi negociações multidisciplinares com suporte interno", valor: 1 }], peso: 3 },
+{ question: "Você já transformou uma proposta inicial sem competitividade em uma proposta vantajosa?", options: [{ texto: "Nunca consegui", valor: 0 }, { texto: "Consegui após muita insistência", valor: 0.5 }, { texto: "Sim, reestruturei escopo, condições ou volume para torná-la viável", valor: 1 }], peso: 2 },
+{ question: "Você costuma registrar aprendizados após negociações críticas?", options: [{ texto: "Nunca reflito sobre isso", valor: 0 }, { texto: "Penso por alto", valor: 0.5 }, { texto: "Sim, documento e melhoro meu processo de negociação continuamente", valor: 1 }], peso: 2 },
+{ question: "Você já liderou uma negociação 100% sozinho com impacto relevante para a empresa?", options: [{ texto: "Nunca conduzi sozinho", valor: 0 }, { texto: "Já participei como apoio", valor: 0.5 }, { texto: "Sim, conduzi com autonomia, estratégia e entreguei resultado", valor: 1 }], peso: 3 },
+{ question: "Você costuma criar cenários comparativos entre fornecedores (prazo, condição de pagamento, risco, histórico)?", options: [{ texto: "Nunca fiz esse tipo de comparação", valor: 0 }, { texto: "Faço isso em casos pontuais", valor: 0.5 }, { texto: "Sim, comparo todos os fatores críticos antes de decidir", valor: 1 }], peso: 2 },
+{ question: "Você já propôs soluções alternativas para reduzir custo sem impactar a qualidade do produto?", options: [{ texto: "Nunca pensei nisso", valor: 0 }, { texto: "Já sugeri ideias de forma informal", valor: 0.5 }, { texto: "Sim, redesenhei escopo ou volume gerando saving sustentável", valor: 1 }], peso: 3 },
+{ question: "Você entende como a negociação afeta diretamente o fluxo de caixa e o orçamento da empresa?", options: [{ texto: "Nunca pensei nisso", valor: 0 }, { texto: "Tenho noção geral", valor: 0.5 }, { texto: "Sim, analiso os impactos financeiros antes de fechar", valor: 1 }], peso: 3 },
+{ question: "Você já desconsiderou uma proposta aparentemente barata após analisar composição de custo, tributos e riscos logísticos?", options: [{ texto: "Nunca fiz esse tipo de análise", valor: 0 }, { texto: "Já aconteceu, mas sem método definido", valor: 0.5 }, { texto: "Sim, identifiquei riscos ocultos e escolhi a opção mais estratégica", valor: 1 }], peso: 3 }
+];
+
 const App = () => {
+  const [tipoQuiz, setTipoQuiz] = useState<string | null>(null);
   const [step, setStep] = useState(0);
   const [answers, setAnswers] = useState<number[]>([]);
   const [showResult, setShowResult] = useState(false);
   const [resultado, setResultado] = useState<any>(null);
+
+  const quizData = tipoQuiz === "nivel" ? quizNivel : tipoQuiz === "negociacao" ? quizNegociacao : [];
 
   const handleAnswer = (valor: number) => {
     const updatedAnswers = [...answers, valor];
@@ -77,7 +115,7 @@ const App = () => {
     return (pontuacaoTotal / pesoTotal) * 100;
   };
 
-  const classificarNivel = (score: number) => {
+  const classificarNivelCompras = (score: number) => {
     if (score < 15) return { nivel: "Estagiário", descricao: "Você está no início da jornada. Ideal para quem está aprendendo sobre a área." };
     if (score < 25) return { nivel: "Auxiliar de Compras", descricao: "Você está ganhando base. Foque em entender processos e sistemas." };
     if (score < 35) return { nivel: "Assistente de Compras", descricao: "Você já executa com apoio. Hora de buscar mais autonomia e visão fiscal." };
@@ -88,10 +126,19 @@ const App = () => {
     if (score < 90) return { nivel: "Gerente de Compras", descricao: "Você possui visão ampla. Atuação direta com estratégia, metas e resultado." };
     return { nivel: "Diretor de Compras", descricao: "Você pensa em nível de negócios. É referência em decisões estratégicas e gestão de riscos." };
   };
+  
+  const classificarNivelNegociacao = (score: number) => {
+    if (score < 20) return { nivel: "Operacional", descricao: "Você atua de forma reativa. Precisa desenvolver visão estratégica e controle emocional." };
+    if (score < 40) return { nivel: "Tático", descricao: "Você negocia com consistência, mas ainda há espaço para evoluir em análise e influência." };
+    if (score < 70) return { nivel: "Negociador Estratégico", descricao: "Você domina técnicas, pensa no todo e gera valor real para a empresa." };
+    return { nivel: "Negociador de Alta Performance", descricao: "Você atua como referência. Alta capacidade analítica, emocional e técnica." };
+  };
 
   const handleSubmit = (respostas: number[]) => {
     const totalScore = calcularPontuacao(respostas);
-    const resultadoFinal = classificarNivel(totalScore);
+    const resultadoFinal = tipoQuiz === "nivel" 
+  ? classificarNivelCompras(totalScore) 
+  : classificarNivelNegociacao(totalScore);
     setResultado(resultadoFinal);
     setShowResult(true);
   };
@@ -105,32 +152,29 @@ const App = () => {
     }
   };
 
+  if (!tipoQuiz) {
+    return (
+      <div style={{ padding: "2rem", fontFamily: "sans-serif", textAlign: "center" }}>
+        <h1>Qual quiz você quer fazer?</h1>
+        <button onClick={() => setTipoQuiz("nivel")} style={{ margin: 10, padding: 15, backgroundColor: "#FCB225", borderRadius: 6 }}>📊 Quiz de Nível</button>
+        <button onClick={() => setTipoQuiz("negociacao")} style={{ margin: 10, padding: 15, backgroundColor: "#FCB225", borderRadius: 6 }}>💼 Quiz de Negociação</button>
+      </div>
+    );
+  }
+
   const progresso = Math.round((step / quizData.length) * 100);
 
   return (
     <div style={{ padding: "2rem", fontFamily: "sans-serif" }}>
-      <h1 style={{ textAlign: "center", fontSize: "1.8rem", fontWeight: "bold", marginBottom: "0.5rem" }}>
-        Diagnóstico de Perfil em Compras
-      </h1>
-      <p style={{ textAlign: "center", fontSize: "1rem", color: "#555", marginBottom: "1.5rem" }}>
-        por  @descomplicando.compras
-      </p>
+      <h1 style={{ textAlign: "center" }}>{tipoQuiz === "nivel" ? "Diagnóstico de Perfil em Compras" : "Diagnóstico de Negociação"}</h1>
+      <p style={{ textAlign: "center", color: "#555" }}>por @descomplicando.compras</p>
 
       {!showResult ? (
         <>
           <div style={{ marginBottom: "1rem" }}>
-            <p>
-              Pergunta {step + 1} de {quizData.length} ({progresso}%)
-            </p>
+            <p>Pergunta {step + 1} de {quizData.length} ({progresso}%)</p>
             <div style={{ background: "#eee", borderRadius: "4px", height: "10px" }}>
-              <div
-                style={{
-                  width: `${progresso}%`,
-                  height: "10px",
-                  background: "#FCB225",
-                  borderRadius: "4px"
-                }}
-              />
+              <div style={{ width: `${progresso}%`, height: "10px", background: "#FCB225", borderRadius: "4px" }} />
             </div>
           </div>
 
@@ -141,18 +185,7 @@ const App = () => {
               <button
                 key={idx}
                 onClick={() => handleAnswer(opt.valor)}
-                style={{
-                  margin: "8px 0",
-                  padding: "12px 24px",
-                  backgroundColor: "#FCB225",
-                  color: "#000",
-                  border: "none",
-                  borderRadius: "6px",
-                  fontWeight: "bold",
-                  cursor: "pointer",
-                  width: "100%",
-                  maxWidth: "400px"
-                }}
+                style={{ margin: "8px 0", padding: "12px 24px", backgroundColor: "#FCB225", color: "#000", border: "none", borderRadius: "6px", fontWeight: "bold", cursor: "pointer", width: "100%", maxWidth: "400px" }}
               >
                 {opt.texto}
               </button>
@@ -163,14 +196,7 @@ const App = () => {
             <div style={{ display: "flex", justifyContent: "center" }}>
               <button
                 onClick={handleBack}
-                style={{
-                  marginTop: "12px",
-                  backgroundColor: "#ccc",
-                  padding: "10px 24px",
-                  borderRadius: "6px",
-                  fontWeight: "bold",
-                  cursor: "pointer"
-                }}
+                style={{ marginTop: "12px", backgroundColor: "#ccc", padding: "10px 24px", borderRadius: "6px", fontWeight: "bold", cursor: "pointer" }}
               >
                 ⬅ Voltar
               </button>
@@ -185,14 +211,7 @@ const App = () => {
           <div style={{ display: "flex", justifyContent: "center" }}>
             <button
               onClick={() => window.location.reload()}
-              style={{
-                marginTop: "20px",
-                backgroundColor: "#ccc",
-                padding: "10px 24px",
-                borderRadius: "6px",
-                fontWeight: "bold",
-                cursor: "pointer"
-              }}
+              style={{ marginTop: "20px", backgroundColor: "#ccc", padding: "10px 24px", borderRadius: "6px", fontWeight: "bold", cursor: "pointer" }}
             >
               🔁 Refazer o teste
             </button>
